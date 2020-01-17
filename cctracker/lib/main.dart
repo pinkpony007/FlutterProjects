@@ -9,6 +9,7 @@ class CCTracker extends StatelessWidget{
   Widget build(BuildContext context) {
     // TODO: implement build
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'CC Tracker',
       theme: ThemeData(
         primarySwatch: Colors.blue
