@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:cctracker/CCData.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -56,13 +54,36 @@ class CCListState extends State<CCList>{
   }
 
   List<Widget> _buildList(){
-      return data.map((CCData f) => ListTile(
-        subtitle: Text(f.symbol),
-        title: Text(f.name),
-        leading: CircleAvatar(child: Text(f.rank.toString())),
-        trailing: Text('\$${f.price.toStringAsFixed(2)}')
-        )).toList();
-  }
+        return data.map((CCData f) => ListTile(
+          subtitle: Text(f.symbol),
+          title: Text(f.name),
+          leading: InkWell(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(
+                builder: (BuildContext context) {
+                  return AnotherPage(f.rank);
+                }));
+            },
+            child: 
+              Hero(
+                tag: 'TEST' + f.rank.toString(),//different tag to hero
+                child: CircleAvatar(child: Text(f.rank.toString()))
+                /*child: Container(
+                    height: 50.0, 
+                    width: 50.0,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        fit: BoxFit.fill,
+                        image: NetworkImage(
+                          'https://i.ya-webdesign.com/images/pixels-drawing-pokemon-3.png'
+                          )
+                      )
+              //CircleAvatar(child: Text(f.rank.toString()))
+              ))*/)),
+          trailing: Text('\$${f.price.toStringAsFixed(2)}')
+          )).toList();
+    }
 
   @override
   void initState(){
@@ -70,4 +91,30 @@ class CCListState extends State<CCList>{
     _loadCC();
   }
 
+}
+
+
+class AnotherPage extends StatelessWidget{
+
+  int id;
+
+  AnotherPage(int rank){
+    id = rank;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+       body: Hero(
+         tag: 'TEST$id',
+         child: Center(
+           child: Container(
+             height: 300.0,
+             width: 300.0,
+              child: Center(child: Text(id.toString(), textScaleFactor: 10)),
+                color: Colors.green[300]              
+       ))),
+    );
+  }
 }
