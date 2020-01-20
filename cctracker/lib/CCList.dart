@@ -1,5 +1,6 @@
 import 'package:cctracker/CCData.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -36,7 +37,6 @@ class CCListState extends State<CCList>{
     final response = await http.get('https://api.coinmarketcap.com/v2/ticker/?limit=100');
 
     if(response.statusCode == 200){
-      //print(response.body);
       var allData = (json.decode(response.body) as Map)['data'] as Map<String, dynamic>;
       var ccDataList = List<CCData>();
       allData.forEach((String key, dynamic val){
@@ -67,20 +67,9 @@ class CCListState extends State<CCList>{
             child: 
               Hero(
                 tag: 'TEST' + f.rank.toString(),//different tag to hero
-                child: CircleAvatar(child: Text(f.rank.toString()))
-                /*child: Container(
-                    height: 50.0, 
-                    width: 50.0,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        fit: BoxFit.fill,
-                        image: NetworkImage(
-                          'https://i.ya-webdesign.com/images/pixels-drawing-pokemon-3.png'
-                          )
-                      )
-              //CircleAvatar(child: Text(f.rank.toString()))
-              ))*/)),
+                child: CircleAvatar(child: Text(f.rank.toString())
+                  )
+                )),
           trailing: Text('\$${f.price.toStringAsFixed(2)}')
           )).toList();
     }
@@ -94,7 +83,7 @@ class CCListState extends State<CCList>{
 }
 
 
-class AnotherPage extends StatelessWidget{
+class AnotherPage extends StatefulWidget{
 
   int id;
 
@@ -103,16 +92,22 @@ class AnotherPage extends StatelessWidget{
   }
 
   @override
+  _AnotherPageState createState() => _AnotherPageState();
+}
+
+class _AnotherPageState extends State<AnotherPage> {
+  @override
   Widget build(BuildContext context) {
+    timeDilation = 2.0;
     return Scaffold(
       appBar: AppBar(),
        body: Hero(
-         tag: 'TEST$id',
+         tag: 'TEST${widget.id}',
          child: Center(
            child: Container(
              height: 300.0,
              width: 300.0,
-              child: Center(child: Text(id.toString(), textScaleFactor: 10)),
+              //child: Center(child: Text(widget.id.toString(), textScaleFactor: 10)),
                 color: Colors.green[300]              
        ))),
     );
